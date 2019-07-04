@@ -1,0 +1,8 @@
+FROM java:8-jdk-alpine
+COPY ./target/gitrepo-service-api.jar /usr/app/
+WORKDIR /usr/app
+RUN sh -c 'touch gitrepo-service-api.jar'
+ENTRYPOINT ["java","-jar","gitrepo-service-api.jar"]  
+
+
+#EXPOSE 8085
