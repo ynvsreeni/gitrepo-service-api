@@ -75,14 +75,49 @@
 
 	</dependencies>
 
-	 <build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-		<finalName>gitrepo-service-api</finalName>
-	</build>
+		<build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>             
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>               
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
+            </plugin>
+			<!--- Docker reg plugin--->
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>0.10.1</version>
+                <configuration>
+                    <from>
+                        <image>openjdk:11-jdk-slim</image>
+                    </from>
+                    <to>
+                        <image>registry.hub.docker.com/dockerdevy/gitrepo-service:${version}</image>
+                    </to>
+                    <container>
+                        <ports>
+                            <port>8080</port>
+                            <port>15370</port>
+                        </ports>
+                    </container>
+                </configuration>
+            </plugin>
+        </plugins>
+        <finalName>gitrepo-service-api</finalName>
+    </build>
 	
 </project>
