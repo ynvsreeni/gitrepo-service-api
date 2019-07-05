@@ -33,7 +33,7 @@ public class GitHubServiceControllerTest {
 
 	@Test
 	public void getUserReposTest() throws Exception {
-		Mockito.when(gitHubService.getUserRepositories(Mockito.anyObject())).thenReturn(mockUser);
+		Mockito.when(gitHubService.getUserRepositories(Mockito.anyString())).thenReturn(mockUser);
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(	"/projects/ynvsreeni").accept(	MediaType.APPLICATION_JSON);
 		String expected = "{\"userName\":\"ynvsreeni\"}";
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
@@ -43,12 +43,10 @@ public class GitHubServiceControllerTest {
 	@Test
 	@Ignore
 	public void getUserReposTestXML() throws Exception {
-		Mockito.when(gitHubService.getUserRepositories(Mockito.anyObject())).thenReturn(mockUser);
+		Mockito.when(gitHubService.getUserRepositories(Mockito.anyString())).thenReturn(mockUser);
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(	"/projects/ynvsreeni").accept(	MediaType.APPLICATION_XML_VALUE);
-		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-		System.out.println(" = result======== "+result.getResponse().getContentAsString());		
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();				
 		String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><user><userName>ynvsreeni</userName></user>";
-		System.out.println("  === "+result.getResponse().toString());
 		//assertEquals(expected, result.getResponse().getContentAsString(), false);			
 	}
 
@@ -59,8 +57,6 @@ public class GitHubServiceControllerTest {
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(	"/projects/ynvsreeni/temp2").accept(MediaType.APPLICATION_JSON);
 		String expected = "{\"userName\":\"ynvsreeni\"}";
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-		System.out.println("  RE========== "+result.getResponse().getContentAsString());
-		
 		JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
 	}
 	
@@ -70,10 +66,8 @@ public class GitHubServiceControllerTest {
 		Mockito.when(gitHubService.getUserRepository(Mockito.anyString(),Mockito.anyString())).thenReturn(mockUser);
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(	"/projects/ynvsreeni/temp2").accept(	MediaType.APPLICATION_XML_VALUE);
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-		System.out.println(" = result======== "+result.getResponse().getContentAsString());		
 		String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><user><userName>ynvsreeni</userName></user>";
-		System.out.println("  === "+result.getResponse().toString());
-		//assertEquals(expected, result.getResponse().getContentAsString(), false);			
+			//assertEquals(expected, result.getResponse().getContentAsString(), false);			
 	}
 
 

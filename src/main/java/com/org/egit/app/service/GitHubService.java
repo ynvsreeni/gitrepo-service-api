@@ -11,6 +11,8 @@ import org.eclipse.egit.github.core.service.RepositoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
 import com.org.egit.app.bean.Repo;
 import com.org.egit.app.bean.User;
 import java.io.IOException;
@@ -29,7 +31,7 @@ public class GitHubService {
      *  
      */
 	public User getUserRepository(String user, String repo) {
-		  LOGGER.info("getUserRepository");
+		LOGGER.info(" in getUserRepository() call ");
 		RepositoryService repositoryService = new RepositoryService();
 		final CommitService commitService = new CommitService();
 		ContentsService contentsService = new ContentsService();
@@ -46,7 +48,7 @@ public class GitHubService {
 			for (Contributor contributor : contributors) {
 				contributor_ = new com.org.egit.app.bean.Contributor();
 				contributor_.setId(contributor.getId());
-				contributor_.setName(contributor.getName());
+				contributor_.setName(contributor.getLogin());
 				contributor_.setType(contributor.getType());
 				contributor_.setUrl(contributor.getUrl());
 				contributors_.add(contributor_);
@@ -57,10 +59,8 @@ public class GitHubService {
 			repo_.setCommits(repositoryCommits.size());
 			LOGGER.info("Repository commits : "+repositoryCommits.size());
 			//to get readme content from repo
-			RepositoryContents repositoryContents = contentsService.getReadme(r);
-			String readme = new String(Base64.decodeBase64(repositoryContents.getContent().getBytes()));
-			LOGGER.info("README : "+readme);
-			repo_.setReadme(readme);
+			RepositoryContents repositoryContents = contentsService.getReadme(r);			
+			repo_.setReadme(getReadMeContent(repositoryContents));
 			repo_.setContributors(contributors_);
 			repos.add(repo_);
 			user_.setRepos(repos);
@@ -76,7 +76,7 @@ public class GitHubService {
      *  
      */ 
 	public User getUserRepositories(String user) {
-		LOGGER.info(" getUserRepositories()");
+		LOGGER.info(" in getUserRepositories() call ");
 		RepositoryService repositoryService = new RepositoryService();
 		User user_ = new User();
 		List<Repo> repos = new ArrayList<>();
@@ -98,6 +98,23 @@ public class GitHubService {
 			   LOGGER.error("Exception occured @ getUserRepositories() invocation ",e);
 		}
 		return user_;
+	}
+
+	private String getReadMeContent(RepositoryContents repositoryContent) {
+		StringBuffer sb = new StringBuffer();
+		if(repositoryContent != null && repositoryContent.getContent() != null) {
+			String readme = new String(Base64.decodeBase64(repositoryContent.getContent().getBytes()));
+			if(!StringUtils.isEmpty(readme)) {
+				String[] words = readme.split("\\n+");		
+				for (int i = 0; i < 8; i++) {
+					if (words != null && words.length > i) {
+						sb.append(words[i] + "\n");
+					}
+				 }
+			}
+		}
+		LOGGER.info(" README : " + sb.toString());
+	  return sb.toString();
 	}
 
 }

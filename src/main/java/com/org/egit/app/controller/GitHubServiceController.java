@@ -1,5 +1,7 @@
 package com.org.egit.app.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,8 @@ import java.io.IOException;
 @RestController
 public class GitHubServiceController {
 	
+	private static final Logger LOGGER = LoggerFactory.getLogger(GitHubService.class);
+	
     @Autowired
     private GitHubService githubService;
     
@@ -22,7 +26,7 @@ public class GitHubServiceController {
      */  
     @GetMapping(value = "/projects/{user}", produces={ MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
     public User getRepos(@PathVariable("user") String user) throws IOException {
-    	System.out.println(" Repo's ");
+    	LOGGER.info(" getRepo's User"+user);
         return githubService.getUserRepositories(user);
     }
   
@@ -32,10 +36,10 @@ public class GitHubServiceController {
      * @return repository
      *  
      */ 
-    @GetMapping(value = "/projects/{owner}/{repo}", produces={ MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
-    public User getUserRepo(@PathVariable("owner") String owner, @PathVariable("repo") String repoName) throws IOException {
-    	System.out.println(" Repo's ");
-        return githubService.getUserRepository(owner,repoName);
+    @GetMapping(value = "/projects/{user}/{repo}", produces={ MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
+    public User getUserRepo(@PathVariable("user") String user, @PathVariable("repo") String repoName) throws IOException {
+    	LOGGER.info(" getUserRepo User"+user+ " Repo : "+repoName);
+        return githubService.getUserRepository(user,repoName);
     }
     
     
