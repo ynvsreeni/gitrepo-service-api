@@ -13,7 +13,7 @@ mvnw.cmd clean install
 mvnw.cmd spring-boot:run
 (we need modifiy the pom if any build issue wth docker related config)
 
-API Spec: endpoints
+API Spec: service endpoints
 
  User repository info : localhost:8080/projects/{user}
  User repository activities: localhost:8080/projects/{user}/{repo}
